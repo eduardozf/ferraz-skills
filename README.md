@@ -6,7 +6,7 @@ A collection of portable [Agent Skills](https://agentskills.io/) for coding agen
 
 ### `design-consistency-review`
 
-Review an existing interface for contradictions, broken states, polish gaps, and missing capabilities, then return an evidence-backed triage list. The skill works from source code, screenshots, live applications, design files, and existing feedback.
+Review an existing interface for contradictions, broken states, polish gaps, and missing capabilities, then render an evidence-backed HTML report. The skill works from source code, screenshots, live applications, design files, and existing feedback.
 
 See [the skill definition](skills/design-consistency-review/SKILL.md).
 

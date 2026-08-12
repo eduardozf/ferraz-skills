@@ -1,11 +1,11 @@
 ---
 name: design-consistency-review
-description: Use when the user asks to review an existing UI, run a UI/UX audit, perform visual QA or a polish pass, find design inconsistencies, explain what looks off, or turn scattered interface feedback into actionable findings. Trigger for reviews based on screenshots, source code, a live app or URL, design files, or existing user feedback.
+description: Review an existing UI for contradictions and render the evidence-backed findings as a self-contained HTML report. Use when the user asks to run a UI/UX audit, perform visual QA or a polish pass, find design inconsistencies, explain what looks off, or turn scattered interface feedback into actionable findings. Trigger for reviews based on screenshots, source code, a live app or URL, design files, or existing user feedback.
 ---
 
 # Design Consistency Review
 
-Find the places where a UI contradicts itself, then hand back a triage list someone can work through on a Tuesday afternoon.
+Find the places where a UI contradicts itself, then render an evidence-backed report someone can work through on a Tuesday afternoon.
 
 The failure mode this skill exists to prevent is **the vibes review**: an agent looks at one screen, says the spacing feels a bit tight and the palette is nice, and produces nothing anyone can act on. A real design review is not an aesthetic opinion. It is a *comparison*. You cannot find an inconsistency by looking at one thing — you find it by looking at the same thing in two places and noticing they disagree.
 
@@ -96,50 +96,11 @@ Merge symptoms with one root cause and preserve meaningful exceptions. Keep gaps
 
 ### 5. Report
 
-Use this structure. Stable IDs matter — people paste them into issue trackers.
-
-```markdown
-# Design review — <target> — <date>
-
-**Scope:** what you looked at, and how (screenshots / source / live app).
-**Canon:** the rules you reviewed against, and whether they're documented or derived.
-**Findings:** N total — X broken, Y inconsistent, Z polish, W gaps.
-
-## Fix first
-The three-to-five findings with the best impact-to-effort ratio, by ID and one line each.
-
-## 1. Hierarchy and layout
-
-### DR-01 — Sidebar accumulates ungrouped items `inconsistent` `M`
-**Where:** left sidebar, all screens.
-**What:** Six unrelated entries share one flat list with no separators or ordering logic.
-**Evidence:** Six entries observed on `/projects`; other primary navigation groups use labeled sections.
-**Why it matters:** Nothing has priority, so scanning cost grows with every feature added.
-**Fix:** Group into <named sections>; move <item> under <section>.
-
-### DR-02 — ...
-
-## 2. Component consistency
-...
-
-## Gaps
-Missing capabilities, same format, clearly separated from defects.
-
-## Preferences
-Taste calls, honestly labeled, so they can be dismissed cheaply.
-
-## Not filed
-Things you considered and deliberately didn't flag, with the reason. Prevents the same debate next review.
-
-## Open questions
-Anything you couldn't resolve without the team — intentional divergences, states you couldn't reach.
-```
-
-Every finding needs **Where**, **What**, **Evidence**, and **Fix**. A finding without a location is unactionable; one without evidence is a hunch; one without a proposed fix pushes your work onto the reader. **Why it matters** can be dropped when it's self-evident.
+Read and follow the [HTML report format](references/html-report-format.md) before rendering. It is the authoritative contract for the report's file location, structure, evidence patterns, light and dark themes, and vocabulary. Render the review as one self-contained HTML file in the OS temp directory, then give the user a link to that file.
 
 Prefer twenty solid findings over sixty padded ones. If two findings share one root cause — six components drifting because there's no spacing token — file the root cause once and list the symptoms under it. That's one fix, not six.
 
-**Complete when:** the report states scope, evidence, canon, and limitations; every finding satisfies the contract; and the fix-first list reflects impact-to-effort rather than checklist order.
+**Complete when:** the report follows the HTML format, states scope, evidence, canon, and limitations; every finding satisfies the format's contract; the fix-first list reflects impact-to-effort rather than checklist order; and every screenshot is embedded rather than path-linked.
 
 ## When the input is existing feedback
 
