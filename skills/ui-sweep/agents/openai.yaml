@@ -1,4 +1,0 @@
-interface:
-  display_name: "UI Sweep"
-  short_description: "Audit application interfaces for UI quality"
-  default_prompt: "Use $ui-sweep to audit this application interface and produce an evidence-backed findings report."

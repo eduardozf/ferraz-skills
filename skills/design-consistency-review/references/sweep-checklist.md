@@ -1,81 +1,8 @@
----
-name: ui-sweep
-description: Use this when the user asks for a UI sweep, design QA, visual-consistency review, interface-polish audit, or pre-release frontend review of an existing application. Also trigger when the goal is to find design-system drift, missing interaction states, responsive UI problems, or basic accessibility issues.
----
+# Sweep checklist
 
-# UI sweep
+The full pass. Work through it in order — the point is to keep going past whatever caught your eye first. Skip sections that don't apply to the surface you're reviewing, but skip them deliberately.
 
-Run an evidence-led review of an existing interface. Default to an audit: do not modify the application unless the user explicitly asks for fixes. Treat checklist heuristics as prompts for investigation, not automatic defects. Separate product-capability gaps from defects, and never present this sweep as a complete accessibility-conformance audit.
-
-## Process
-
-### 1. Establish scope
-
-Enumerate the screens, routes, components, states, themes, and viewport sizes in scope. Record which evidence is available: a live application, source code, design files, or screenshots. Infer a reasonable scope from the provided artifacts when possible and state any material assumptions.
-
-*Complete when:* the review inventory names every in-scope surface and available evidence source.
-
-### 2. Gather evidence
-
-Use every evidence mode available:
-
-- **Live application:** exercise user flows, keyboard navigation, interaction states, themes, loading, error handling, and responsive behavior.
-- **Source code:** inspect components, tokens, styles, variants, and state logic; cite exact files and lines.
-- **Design files:** compare hierarchy, tokens, component variants, content, and responsive intent.
-- **Screenshots only:** assess visible properties and label dynamic behavior as unverified.
-
-Capture concrete evidence as screenshots, routes, component names, measurements, source locations, or reproducible interaction steps. Do not turn an unsupported hunch into a finding.
-
-*Complete when:* every in-scope surface has been inspected through all evidence modes available for it, and unavailable behavior is marked unverified.
-
-### 3. Run the checklist
-
-Work through every checklist section in order. Mark each section as checked, not applicable, or unverified so an early cluster of findings does not end the sweep. When accessibility checks apply, read [the measurable accessibility checks](references/accessibility-checks.md) and use the project's standard if it is stricter.
-
-*Complete when:* every applicable checklist section has a recorded disposition and every finding has evidence.
-
-### 4. Consolidate and prioritize
-
-Merge symptoms that share a root cause. Keep defects separate from missing capabilities. Use the project's severity scale when one exists; otherwise use:
-
-- **Critical:** blocks task completion or creates a serious accessibility or safety risk.
-- **Major:** repeatedly harms comprehension, navigation, or interaction.
-- **Moderate:** creates a meaningful inconsistency or resilience problem.
-- **Minor:** causes localized polish or consistency debt with limited user impact.
-
-*Complete when:* findings are deduplicated, assigned a severity, and separated into defects and capability gaps.
-
-### 5. Report
-
-Lead with the highest-impact patterns rather than checklist order. Include:
-
-1. Executive summary
-2. Scope, evidence, and limitations
-3. Findings ordered by severity
-4. Systemic patterns and root causes
-5. Product-capability gaps
-6. Recommended remediation order
-
-Write each finding with this contract:
-
-```markdown
-## [Severity] Finding title
-
-- Category:
-- Affected surfaces:
-- User impact:
-- Evidence:
-- Recommendation:
-- Confidence:
-```
-
-If the user also requests fixes, preserve the findings report, connect every change to a finding, and recheck the affected surfaces after implementation.
-
-*Complete when:* every finding follows the contract, limitations are explicit, and the remediation order reflects user impact and root-cause leverage.
-
-## Checklist
-
-Work through the full pass in order. Skip sections that do not apply deliberately. Each item is something to check, not a rule to recite; the “prove it” notes turn a hunch into a defensible finding.
+Each item is phrased as something to *check*, not a rule to recite. Under most items there's a "prove it" note: the concrete way to turn a hunch into a finding you can defend.
 
 **Contents**
 1. [Hierarchy and layout](#1-hierarchy-and-layout)
@@ -97,7 +24,7 @@ Work through the full pass in order. Skip sections that do not apply deliberatel
 
 - Does reading order match interaction order? Walk the flow and write down the sequence of decisions the user makes, then compare it to the top-to-bottom order on screen. A control that demands a prerequisite sitting *above* that prerequisite is the classic version.
 - Does the visually dominant element match the most important action? Check whether the primary action is actually the most prominent thing, and that there's exactly one primary per view.
-- Are containers grouped, or just accumulating? Sidebars, toolbars, kebab menus, and settings pages all drift toward flat lists of unrelated entries as features land. Treat roughly seven ungrouped items as a prompt to test scanability, not an automatic defect.
+- Are containers grouped, or just accumulating? Sidebars, toolbars, kebab menus, and settings pages all drift toward flat lists of unrelated entries as features land. Treat roughly seven ungrouped items as a prompt to test scanability, not an automatic finding.
 - Do items in a shared container have a discernible ordering logic (frequency, alphabetical, workflow order)? Arbitrary order is a real cost at scale.
 - Is anything in the wrong container — a global setting in a per-item menu, a one-off action in a persistent nav?
 - Does the same information appear in two places, and can they disagree?
@@ -152,7 +79,7 @@ Work through the full pass in order. Skip sections that do not apply deliberatel
 - Contrast holds in both themes, if there are two. Dark mode regressions cluster in borders, disabled states, and hover fills.
 - Border radius, border width, shadow, and elevation drawn from a fixed set.
 
-*Prove it:* grep the codebase for hex values and font-size declarations; the count usually speaks for itself.
+*Prove it:* search the codebase for hex values and font-size declarations; the count usually speaks for itself.
 
 ## 6. Interaction states and affordances
 
@@ -203,14 +130,17 @@ The section that static reviews miss. For every interactive element, check all o
 
 ## 10. Accessibility basics
 
-This is a signal check, not a conformance audit. Use the project standard when one exists; otherwise use [the measurable accessibility checks](references/accessibility-checks.md):
+This is a signal check, not a conformance audit. Use the project's accessibility standard when one exists; otherwise use [WCAG 2.2 Level AA](https://www.w3.org/TR/WCAG22/) as the baseline:
 
-- Text and non-text contrast, including disabled text, placeholder text, focus indicators, and component boundaries.
-- Visible keyboard focus on every interactive element.
-- Touch and click targets meet the applicable minimum size or a documented exception.
+- Text contrast is at least 4.5:1 for normal text and 3:1 for large text; essential graphical objects, component boundaries, and interaction states reach 3:1.
+- Every interactive element is operable by keyboard; focus is visible, logical, not trapped, and not entirely obscured.
+- Pointer targets are at least 24 by 24 CSS pixels or meet a WCAG 2.2 target-size exception.
 - Meaning never conveyed by color alone.
-- Icon-only buttons have accessible names.
+- Icon-only buttons and custom controls expose an accessible name, role, value, and state.
 - Heading levels form a sensible outline.
+- Important asynchronous status changes are announced without moving focus unexpectedly.
+
+*Prove it:* record the route or component, viewport, theme, input method, observed result, and relevant source location. Mark behavior unverified when the available evidence cannot establish it.
 
 ## 11. Gaps
 

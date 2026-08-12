@@ -4,30 +4,30 @@ A collection of portable [Agent Skills](https://agentskills.io/) for coding agen
 
 ## Skills
 
-### `ui-sweep`
+### `design-consistency-review`
 
-Run an evidence-led quality sweep of an existing application interface. The skill covers hierarchy, component consistency, interaction states, responsive resilience, accessibility signals, and code-level design-system drift.
+Review an existing interface for contradictions, broken states, polish gaps, and missing capabilities, then return an evidence-backed triage list. The skill works from source code, screenshots, live applications, design files, and existing feedback.
 
-See [the skill definition](skills/ui-sweep/SKILL.md).
+See [the skill definition](skills/design-consistency-review/SKILL.md).
 
 ## Install
 
 From this checkout:
 
 ```sh
-npx skills add . --skill ui-sweep
+npx skills add . --skill design-consistency-review
 ```
 
 After publishing the repository to GitHub:
 
 ```sh
-npx skills add <owner>/ferraz-skills --skill ui-sweep
+npx skills add eduardozf/ferraz-skills --skill design-consistency-review
 ```
 
 ## Validate
 
 ```sh
-agentskills validate skills/ui-sweep
+agentskills validate skills/design-consistency-review
 npx skills add . --list
 ```
 

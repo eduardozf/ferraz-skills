@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Consistency Review"
+  short_description: "Turn UI contradictions into actionable findings"
+  default_prompt: "Use $design-consistency-review to audit this interface and produce an evidence-backed triage list."
