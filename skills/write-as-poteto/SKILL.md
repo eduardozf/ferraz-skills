@@ -67,6 +67,17 @@ An agent reads this file every time it fires, so ornament costs on every run.
 - One thought per sentence, but vary the length so it doesn't read machine-written.
 - A sentence that could appear unchanged in a different skill says nothing about this one. Cut it.
 
+## Context pollution
+
+Keep text that changes the agent's next decision. Cut text that only explains how the skill was made.
+
+- Remove research history, unnecessary dates, provenance disclaimers, and claims that the instructions are already distilled. Keep attribution short when quoting someone.
+- Put completed research findings directly in the instructions. Add a source link only when consulting it is part of the task, with an explicit reading condition.
+- Keep each rule once. Merge repeated warnings, evidence requirements, and scope exclusions instead of restating them across sections.
+- Remove links to neighboring skills unless the task actually requires a handoff. Naming another skill can trigger unnecessary work.
+- Shorten qualifiers that add no condition. "Explain how the main parts interact" is enough without "when their relationship is needed to make a correct change."
+- Preserve necessary context while pruning. A link alone does not replace the knowledge the agent needs to act.
+
 ## Naming
 
 - Workflow: a verb or a short noun the user would type.
