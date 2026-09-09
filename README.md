@@ -16,31 +16,18 @@ Write, review, or fix a `SKILL.md` using poteto's conventions for intent, trigge
 
 See [the skill definition](skills/write-as-poteto/SKILL.md).
 
+
+### `theo-agent-guidance`
+
+Shape repository instructions in "Theo style" or "T3 Code style" when writing or updating `AGENTS.md`.
+
+See [the skill definition](skills/theo-agent-guidance/SKILL.md).
+
 ## Install
 
-From this checkout:
-
 ```sh
-npx skills add . --skill design-consistency-review
-npx skills add . --skill write-as-poteto
+npx skills add eduardozf/ferraz-skills
 ```
-
-From the public GitHub repository:
-
-```sh
-npx skills add eduardozf/ferraz-skills --skill design-consistency-review
-npx skills add eduardozf/ferraz-skills --skill write-as-poteto
-```
-
-## Validate
-
-```sh
-agentskills validate skills/design-consistency-review
-agentskills validate skills/write-as-poteto
-npx skills add . --list
-```
-
-Install the reference validator with `python -m pip install skills-ref` before running the first command.
 
 ## License
 
