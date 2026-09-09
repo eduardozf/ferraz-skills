@@ -25,5 +25,8 @@ jobs:
       - name: Validate design consistency review
         run: agentskills validate skills/design-consistency-review
 
+      - name: Validate write as poteto
+        run: agentskills validate skills/write-as-poteto
+
       - name: Check skills.sh discovery
         run: npx --yes skills add . --list
