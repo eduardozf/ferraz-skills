@@ -18,6 +18,10 @@ Investigate the requested problem without modifying anything.
 
 ## Research
 
+For a behavioral bug, record expected and observed behavior, inputs, environment, and a safe reproduction or existing trace before diagnosing the cause. If reproduction is unavailable, say what remains unverified. Distinguish code defects from data, configuration, dependency, and environment differences.
+
+If running the original system would change state, use existing artifacts or an isolated reproduction. Keep the source project read-only. For a request to explain code, trace the implementation without requiring a runtime reproduction.
+
 Inspect the relevant code paths and, when useful:
 
 - Git history
@@ -36,6 +40,7 @@ Produce a concise draft containing:
 - Findings
 - Relevant code paths
 - Evidence
+- Reproduction result or verification limits, when investigating a behavioral bug
 - Likely root cause or hypotheses
 - Useful references
 - Remaining unknowns

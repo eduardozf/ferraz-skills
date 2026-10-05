@@ -1,164 +1,74 @@
-# HTML Report Format
+# HTML report format
 
-## Contents
+## Start from the template
 
-1. [Scaffold](#scaffold)
-2. [Theme toggle](#theme-toggle)
-3. [Header](#header)
-4. [Fix first](#fix-first)
-5. [Finding card](#finding-card)
-6. [Evidence patterns](#evidence-patterns)
-7. [Style guidance](#style-guidance)
-8. [Gaps and Preferences sections](#gaps-and-preferences-sections)
-9. [Tone](#tone)
+When rendering a report, copy [report-template.html](../assets/report-template.html) into the OS temp directory. Replace every `{{PLACEHOLDER}}` with escaped report text, set the document language, and insert finding sections as described below. The input is the review evidence and classified findings; the output is one standalone HTML file. Remove unused sections and authoring comments.
 
-Render the review as a single self-contained HTML file in the OS temp directory. Load Tailwind from the CDN; hand-build everything else: annotated screenshots, swatch grids, side-by-side variant strips, and state matrices. Do not use a diagramming library. Design findings are *evidence*, not graphs: the reader needs to see the two things that disagree, next to each other, at real size.
+Keep CSS and scripts inline. Embed every screenshot as a base64 data URI. Do not load external fonts, styles, scripts, or images, or reference local asset paths. If images push the file past about 10 MB, downscale them while preserving legible evidence. If the template cannot be read, report the missing resource rather than substituting a CDN scaffold.
 
-Self-contained means self-contained. Inline every screenshot as a base64 data URI so the file survives being moved, zipped, or emailed. If that pushes the file past about 10 MB, downscale the images instead of linking to paths that will break.
+Use the template's CSS classes for cards, badges, grids, and evidence. Add inline CSS only where an evidence pattern requires it. Do not add app code, filtering, diagramming libraries, or interactions beyond the theme toggle and anchor links.
 
-## Scaffold
+## Header and coverage
 
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Design review — {{target}}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = { darkMode: "class" };
-      // Set before first paint to avoid a flash of the wrong theme.
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.classList.add("dark");
-      }
-    </script>
-    <style>
-      /* small custom layer for things Tailwind doesn't cover cleanly:
-         annotation pins, hairline rules over screenshots, swatch checkerboards */
-      .pin { font-variant-numeric: tabular-nums; }
-      .checker { background-image: conic-gradient(#e7e5e4 25%, transparent 0 50%, #e7e5e4 0 75%, transparent 0); background-size: 12px 12px; }
-    </style>
-  </head>
-  <body class="bg-stone-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans">
-    <main class="max-w-5xl mx-auto px-6 py-12 space-y-12">
-      <header>...</header>
-      <section id="fix-first">...</section>
-      <section id="findings" class="space-y-10">...</section>
-      <section id="gaps">...</section>
-    </main>
-  </body>
-</html>
-```
+Show the target, date, scope, available evidence, and documented or derived canon. Add a compact legend for the classes used in the report. If no canon can be established, state that limitation.
 
-## Theme toggle
+Record checklist coverage as `checked`, `not applicable`, or `unverified`. State material assumptions, evidence limitations, and unavailable artifact checks under Coverage and limitations. Put unresolved intent or unlocalized feedback under Open questions. Omit empty optional sections.
 
-The report must ship a working light/dark toggle. This is not decoration: half the findings in a design review concern colour, contrast, and state, and the reader will flip their own product between themes while reading. A report that renders only in light mode cannot be checked against a dark-mode finding.
+## Fix first and empty reviews
 
-Rules:
+After the header, list up to five supported defect findings with the best impact-to-effort ratio as anchor links to their cards. Use only actual findings; one finding warrants one link. Omit Fix first when there are no defects.
 
-- **Put the toggle in the header**, at the top-right, as an icon button with an accessible label. Use one control with two states; do not add a three-way system dropdown.
-- **Default from `prefers-color-scheme`**, set before first paint as shown in the scaffold so there is no flash.
-- **Do not use `localStorage`.** The toggle only needs to hold for the session; persistence breaks in sandboxed viewers and adds little value to a document read once.
-- **Give every surface a `dark:` pair.** Cover backgrounds, borders, and text. A card with `bg-white` but no `dark:bg-slate-900` becomes a glowing rectangle.
-- **Give severity colours separate dark values.** `red-600` on white is right; on slate-950 use `red-400`. Do the same for emerald and amber. Check that all five severity badges remain distinguishable in both themes.
-- **Do not theme screenshots.** A light-mode screenshot directly on a dark page reads as a report defect. Put every image in a neutral fixed container (`bg-stone-100` with a border in both themes) so it reads as a specimen rather than part of the page. If both light and dark captures exist for the same surface, show them side by side and label them; do not switch them with the toggle.
-- **Never rely on the theme to carry meaning.** Mark leakage, drift, and severity with a label or icon as well as colour.
-
-```html
-<button id="theme" aria-label="Toggle dark mode"
-  class="rounded-md border border-slate-300 dark:border-slate-700 px-3 py-1.5 text-sm">
-  <span class="dark:hidden">Dark</span><span class="hidden dark:inline">Light</span>
-</button>
-<script>
-  theme.onclick = () => document.documentElement.classList.toggle("dark");
-</script>
-```
-
-## Header
-
-Show the target name, date, and scope line: what was reviewed and how. Then show a compact legend for the severity badges and a one-line statement of the canon, whether documented or derived from the dominant pattern. Do not write an introduction paragraph. Go straight into Fix first.
-
-## Fix first
-
-Place one card at the top. List three to five findings with the best impact-to-effort ratio, one line each, as anchor links to their full cards. Do not add a summary of the summary.
+When there are no findings of any class, keep the template's empty-review statement and coverage section. When defects exist, replace that statement with their cards. When only gaps or preferences exist, omit Findings or state that no defects were established, then place those cards in their separate sections. Do not invent findings to fill the layout.
 
 ## Finding card
 
-Let the evidence carry the weight. Keep prose sparse and plain.
+Use one `<article class="card" id="DR-01">` per finding. Give each card:
 
-Use one `<article>` for each finding:
+- ID: a stable identifier such as `DR-01`, displayed in monospace.
+- Title: the contradiction, broken behavior, visible defect, missing capability, or proposed choice.
+- Metadata: class, effort (`S`, `M`, `L`), and checklist category. Use `.badge` with `.broken`, `.inconsistent`, `.polish`, `.gap`, or `.preference` for the class.
+- Where: named surfaces, routes, or files in monospace.
+- Evidence: captured instances, measurements, source evidence, or reproducible steps. Label reconstructions as illustrations; do not present them as captures of the application.
+- What and Fix: use the class-specific requirements below.
+- Notes, when needed: intentional exceptions, unresolved decisions, verification limits, or resolved status.
 
-- **ID** — `DR-01`, monospaced and small, before the title. People paste these into trackers.
-- **Title** — short and naming the contradiction, such as "Two tab styles for the same navigation."
-- **Badge row** — severity (`broken` = red, `inconsistent` = amber, `polish` = slate, `gap` = indigo, `preference` = stone), effort (`S` / `M` / `L`), and the category tag.
-- **Where** — monospaced list of surfaces, files, or routes using `font-mono text-sm`.
-- **Evidence** — the centrepiece. Use the patterns below.
-- **What** — one sentence naming the two instances that disagree.
-- **Fix** — one sentence naming which side wins.
-- **Notes** (when applicable) — one line in an amber-tinted box for intentional divergence, a blocked decision, or an already merged change.
+| Class | What | Fix |
+| --- | --- | --- |
+| `inconsistent` | Comparable instances and the rule they contradict. | Winning treatment and the basis for choosing it. |
+| `broken` | Expected versus observed behavior and its trigger. | Action restoring the expected behavior. |
+| `polish` | Visible cosmetic defect and supporting evidence. | Specific correction. |
+| `gap` | User task or reported need and the capability missing from the inspected flow. | Proposed capability and any decision it requires. |
+| `preference` | Proposed aesthetic choice, explicitly labeled as taste. | Suggested treatment and tradeoff. |
 
-Do not write paragraphs of explanation. **If a finding needs a paragraph to be understood, the evidence is wrong; rebuild the evidence.**
+Keep explanations concise. Do not invent a second instance for a finding that does not require one.
+
+Put defects under Findings. Put Gaps and Preferences in separate sections afterward. Use `.card.quiet` for those cards, retaining class, effort, category, and evidence without competing visually with defects.
 
 ## Evidence patterns
 
-Choose the pattern that fits the finding. Mix them; readers stop seeing a report where every card uses the same pattern around the fourth card.
+Choose the pattern that establishes the claim:
 
-### Annotated screenshot (the workhorse)
+- Annotated screenshot: put the image in `.evidence`, with a `.screenshot` wrapper and absolutely positioned `.pin` markers. Add a numbered key; split unrelated observations into separate findings.
+- Side-by-side instances: use `.grid` with tightly cropped captures and labeled origins. For an inconsistency, state why contexts are equivalent and mark the recommended treatment.
+- Variant strip: show relevant variants with their source locations. Explain which differences are accidental rather than treating the count as proof.
+- Swatch or token grid: show values beside `.swatch` chips; use `.checker` for transparency. Identify the violated token or rule.
+- Scale ruler: use `.ruler` bars at measured pixel widths and name the documented scale. Label off-scale values in text as well as color.
+- State matrix: use a table with applicable states as columns. Distinguish `present`, `missing`, `wrong`, `not applicable`, and `unverified`. A state unavailable in a screenshot is unverified, not missing.
+- Order mismatch: place observed interaction order beside visual order. Use inline SVG connectors only if needed to explain the mismatch.
+- Reproduction or source evidence: include steps, expected and observed results, or quoted source locations when screenshots cannot establish the finding.
 
-Put the image in a `relative` container with absolutely positioned numbered pins over it: small circles, `text-xs`, with high contrast against whatever is beneath them. Place a short numbered key below the image. Use this whenever the finding is "look at this specific spot."
+Use readable evidence sizes. Do not shrink captures to meet an arbitrary card height. Keep screenshots in a fixed neutral container and never recolor them with the report theme. When both themes were captured, show and label both; the report toggle must not switch the evidence.
 
-Do not annotate more than four points on one image. Five pins means five findings were merged into one card.
+## Theme and style
 
-### Side-by-side instances (for any "same meaning, different form")
+Keep the template's light/dark toggle in the header. Default from `prefers-color-scheme` before first paint, maintain its accessible label and pressed state, and avoid storage. The toggle must work without an external global.
 
-Put two or more tightly cropped screenshots in a grid, each labelled with its origin. This pattern *proves* an inconsistency, so prefer it when the finding is a divergence. Show only the element in question. Mark the winning instance with a small emerald label so the fix is visible without reading.
+Use the template's theme variables for backgrounds, borders, text, and badges. Keep class labels visible independently of color. Use one accent and the class palette; distinguish all classes in both themes.
 
-### Variant strip (for "N implementations of one thing")
+Use sentence case headings, short paragraphs, and concrete actions. Preserve terms such as finding, token, instance, state, and canon where they describe the evidence. Avoid unsupported claims such as “modern”, “intuitive”, or “improves UX”.
 
-Show a horizontal row of every variant found, with its file path or location underneath in `font-mono text-xs`. Eleven button instances in a row make an argument no prose can. Grey out the variants that should be deleted.
+## Check before delivery
 
-### Swatch / token grid
+Open the completed report and inspect both themes, visible content, evidence, and narrow layouts. Follow each Fix first link to its card. Check runtime errors and that embedded images load. With external requests blocked, confirm that styling and the theme toggle still work; if that check is unavailable, inspect asset references and state the execution limit.
 
-Render colour chips as small squares with the hex value beneath. Group near-duplicates so the drift is obvious; `#3B82F6` and `#3C82F5` next to each other need no commentary. Use the checkerboard class behind anything transparent. Apply the same pattern to radii, shadows, and border widths.
-
-### Scale ruler (for spacing and type)
-
-Render horizontal bars at their actual pixel widths and label them. Use the accent colour for values on the scale and red for off-scale values. One glance should show how many arbitrary numbers are in play.
-
-### State matrix
-
-Build a table with components down the side and states across the top: default, hover, focus, disabled, loading, empty, and error. Use a checkmark for present, an em dash for missing, or a small red marker for wrong. This is the fastest way to show a hole in state coverage and usually produces the most `broken` findings in the report.
-
-### Order mismatch
-
-Place two narrow columns side by side: interaction order on the left, numbered as the user performs it, and visual order on the right, matching top-to-bottom placement. Draw connecting lines with inline SVG where they disagree. Use this only for hierarchy findings. It is the one abstract diagram in the report and should remain rare.
-
-## Style guidance
-
-- Aim for lean editorial, not a corporate dashboard. Use generous whitespace. `font-serif` headings work well against stone and slate.
-- Use one accent, indigo or emerald, plus the severity palette. Add no other colours.
-- Keep evidence blocks around 320–400px tall so a card fits on screen without scrolling.
-- Use `text-xs uppercase tracking-wider` for labels inside evidence blocks so they read as annotation, not UI.
-- Hold the report's spacing scale, type scale, and dark mode to the same standard as the findings. A review that flags inconsistent padding while using inconsistent padding undermines itself.
-- Allow only the Tailwind CDN and theme-toggle scripts. Do not add app code, filtering UI, or any interaction beyond the toggle.
-
-## Gaps and Preferences sections
-
-Put separate Gaps and Preferences sections after the findings. Use the same card format but make them visually quieter: no badges beyond the category and lighter borders. Do not let them compete with defects for attention.
-
-## Tone
-
-Use plain, concise English. Keep the vocabulary aligned with the skill.
-
-**Use exactly:** canon, drift, instance, variant, token, surface, affordance, state, severity, finding.
-
-**Never substitute:** "issue," "bug," or "nit" for finding; "problem" for drift; "style" for token; "screen" for surface when referring to a surface that appears across screens.
-
-Phrasings that fit:
-
-- "Tabs drift: underline in Settings, pill in Projects. Pill is canon — four other views."
-- "Control has no disabled state; it stays live with nothing selected."
-- "Eleven button instances; three cover 90% of usage."
-- "Off-scale: 13px, 18px, 22px against a 4pt scale."
-
-Never write "clean," "modern," "intuitive," "user-friendly," "polished," or "improves UX." They assert a judgement without evidence, which is exactly what this report exists to prevent. If a sentence could be a bullet, make it a bullet. If a bullet could be cut, cut it.
+Remove unresolved placeholders and unused sections. Return the HTML file link with any checks that could not be completed.

@@ -1,8 +1,6 @@
 # Sweep checklist
 
-The full pass. Work through it in order — the point is to keep going past whatever caught your eye first. Skip sections that don't apply to the surface you're reviewing, but skip them deliberately.
-
-Each item is phrased as something to *check*, not a rule to recite. Under most items there's a "prove it" note: the concrete way to turn a hunch into a finding you can defend.
+Work through the sections in order. Mark each `checked`, `not applicable`, or `unverified`, with material coverage limits. Use the evidence notes to substantiate findings.
 
 **Contents**
 1. [Hierarchy and layout](#1-hierarchy-and-layout)
@@ -42,7 +40,7 @@ Each item is phrased as something to *check*, not a rule to recite. Under most i
 - Are there `<div>`s doing a component's job — hand-rolled dropdowns, ad-hoc tooltips — next to the real component that already exists?
 - Does a shared component have per-caller overrides that quietly fork it?
 
-*Prove it:* count. "Four tab implementations across six views" is unarguable.
+*Prove it:* count implementations, then compare equivalent contexts against a documented or justified derived rule. Separate intentional variants from accidental divergence.
 
 ## 3. Iconography
 
@@ -79,11 +77,11 @@ Each item is phrased as something to *check*, not a rule to recite. Under most i
 - Contrast holds in both themes, if there are two. Dark mode regressions cluster in borders, disabled states, and hover fills.
 - Border radius, border width, shadow, and elevation drawn from a fixed set.
 
-*Prove it:* search the codebase for hex values and font-size declarations; the count usually speaks for itself.
+*Prove it:* search for color and font-size declarations, then compare their use against the tokens and semantic roles. Counts alone do not establish drift.
 
 ## 6. Interaction states and affordances
 
-The section that static reviews miss. For every interactive element, check all of these exist and are distinguishable:
+For every interactive element, check the states that apply to its behavior. Mark states unavailable in the evidence unverified rather than missing:
 
 - **Default / hover / focus / active / disabled.** Focus especially — keyboard focus rings get dropped in custom components constantly.
 - **Disabled is real.** A control that stays visually live but does nothing until a precondition is met is a broken affordance. It should look disabled *and* be non-interactive, with the precondition explained (tooltip or helper text) rather than left for the user to discover by clicking.
@@ -122,7 +120,7 @@ The section that static reviews miss. For every interactive element, check all o
 ## 9. Scaling and resilience
 
 - Zero, one, few, many. What does each container look like with no items, one item, and several hundred?
-- Which containers have no ceiling? An unbounded list in a fixed-height sidebar is a problem the moment a real user arrives. Flag it before it's visible.
+- Which containers have no ceiling? Exercise realistic large datasets or inspect constraints before reporting overflow or scanability problems. State the tested workload.
 - Long content: a 60-character name, a paragraph in a one-line field, a very wide table.
 - Narrow and wide viewports; does anything overflow, overlap, or reflow badly?
 - Localization pressure — do labels have room to grow ~30%?
@@ -157,7 +155,7 @@ Missing capabilities that surface during a review. File separately from defects:
 
 ## 12. Code-level sweeps
 
-When you have the source, these turn subjective findings into counts. Adapt the patterns to the stack.
+When you have source, use these searches to identify candidates. Adapt the patterns to the stack and confirm the relevant behavior or rule violation before filing a finding.
 
 - **Component inventory.** List files under the component directory; look for near-duplicate names (`Button`, `ButtonNew`, `PrimaryBtn`).
 - **Hardcoded colors.** Search for hex codes and `rgb(` outside the token/theme file.

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Design review: {{TARGET}}</title>
+    <script>
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #fafaf9;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #cbd5e1;
+        --accent: #047857;
+        --broken-text: #991b1b;
+        --broken-bg: #fee2e2;
+        --inconsistent-text: #92400e;
+        --inconsistent-bg: #fef3c7;
+        --polish-text: #334155;
+        --polish-bg: #e2e8f0;
+        --gap-text: #3730a3;
+        --gap-bg: #e0e7ff;
+        --preference-text: #44403c;
+        --preference-bg: #e7e5e4;
+      }
+      :root.dark {
+        color-scheme: dark;
+        --page: #020617;
+        --surface: #0f172a;
+        --text: #f1f5f9;
+        --muted: #cbd5e1;
+        --border: #475569;
+        --accent: #6ee7b7;
+        --broken-text: #fecaca;
+        --broken-bg: #450a0a;
+        --inconsistent-text: #fde68a;
+        --inconsistent-bg: #451a03;
+        --polish-text: #e2e8f0;
+        --polish-bg: #334155;
+        --gap-text: #c7d2fe;
+        --gap-bg: #1e1b4b;
+        --preference-text: #e7e5e4;
+        --preference-bg: #292524;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--page); color: var(--text); font: 1rem/1.6 system-ui, sans-serif; }
+      main { max-width: 64rem; margin: auto; padding: 3rem 1.5rem; }
+      header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+      header > div { min-width: 0; }
+      h1, h2, h3 { line-height: 1.25; font-family: Georgia, serif; }
+      h1 { margin-top: 0; }
+      h2 { margin-top: 0; }
+      h3 { margin: .5rem 0 1rem; }
+      section { margin-top: 2rem; }
+      p { margin: .75rem 0; }
+      a { color: var(--accent); text-underline-offset: .2em; }
+      button { flex-shrink: 0; padding: .5rem .75rem; border: 1px solid var(--border); border-radius: .5rem; background: var(--surface); color: var(--text); font: inherit; cursor: pointer; }
+      a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+      code, pre, .mono { font-family: ui-monospace, monospace; overflow-wrap: anywhere; }
+      pre { white-space: pre-wrap; }
+      .muted { color: var(--muted); }
+      .card { padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--surface); overflow-wrap: anywhere; scroll-margin-top: 1rem; }
+      .quiet { background: transparent; }
+      .badges { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+      .badge { display: inline-block; padding: .15rem .5rem; border-radius: .3rem; font-size: .875rem; font-weight: 600; }
+      .broken { color: var(--broken-text); background: var(--broken-bg); }
+      .inconsistent { color: var(--inconsistent-text); background: var(--inconsistent-bg); }
+      .polish { color: var(--polish-text); background: var(--polish-bg); }
+      .gap { color: var(--gap-text); background: var(--gap-bg); }
+      .preference { color: var(--preference-text); background: var(--preference-bg); }
+      .evidence { padding: 1rem; margin: 1rem 0; border: 1px solid var(--border); border-radius: .5rem; overflow: auto; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1rem; }
+      figure { margin: 0; min-width: 0; }
+      figcaption { margin-top: .5rem; font-size: .875rem; }
+      .screenshot { position: relative; background: #f5f5f4; color: #0f172a; border: 1px solid #78716c; color-scheme: light; }
+      img { display: block; max-width: 100%; height: auto; }
+      .pin { position: absolute; width: 1.5rem; height: 1.5rem; display: grid; place-items: center; border: 2px solid white; border-radius: 50%; background: #991b1b; color: white; font-size: .75rem; font-weight: 700; }
+      .checker { background: repeating-conic-gradient(#e7e5e4 0 25%, #fff 0 50%) 0 / 12px 12px; }
+      .swatch { width: 3rem; height: 3rem; border: 1px solid var(--border); }
+      .ruler { height: .75rem; background: var(--accent); }
+      table { border-collapse: collapse; width: 100%; text-align: left; }
+      th, td { padding: .5rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+      @media (max-width: 36rem) {
+        main { padding: 1.5rem 1rem; }
+        header { flex-direction: column; }
+        .card { padding: 1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>{{TARGET}}</h1>
+          <p class="muted">{{DATE}} · {{SCOPE}}</p>
+          <p><strong>Evidence:</strong> {{EVIDENCE}}</p>
+          <p><strong>Canon:</strong> {{CANON}}</p>
+          <!-- Add a legend for the finding classes present in the report. -->
+        </div>
+        <button id="theme" type="button" aria-label="Toggle dark mode" aria-pressed="false">Toggle theme</button>
+      </header>
+
+      <!-- Insert Fix first here only when supported defect findings exist. -->
+      <section id="findings" aria-labelledby="findings-heading">
+        <h2 id="findings-heading">Findings</h2>
+        <!-- Replace this statement with finding cards when findings exist. -->
+        <p>No findings were established within the inspected scope. Unverified areas are listed below.</p>
+      </section>
+
+      <!-- Insert separate Gaps and Preferences sections when applicable. -->
+      <section id="coverage" aria-labelledby="coverage-heading">
+        <h2 id="coverage-heading">Coverage and limitations</h2>
+        <p>{{COVERAGE}}</p>
+        <p>{{LIMITATIONS}}</p>
+      </section>
+      <!-- Insert Open questions only when decisions or evidence remain unresolved. -->
+    </main>
+    <script>
+      const themeButton = document.getElementById("theme");
+      function updateThemeButton() {
+        const dark = document.documentElement.classList.contains("dark");
+        themeButton.setAttribute("aria-pressed", String(dark));
+        themeButton.textContent = dark ? "Use light theme" : "Use dark theme";
+      }
+      themeButton.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        updateThemeButton();
+      });
+      updateThemeButton();
+    </script>
+  </body>
+</html>

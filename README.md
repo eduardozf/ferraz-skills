@@ -10,12 +10,17 @@ Review an existing interface for contradictions, broken states, polish gaps, and
 
 See [the skill definition](skills/design-consistency-review/SKILL.md).
 
+### `investigate`
+
+Investigate bugs or explain code behavior without changing the project. Return a technical draft separating evidence, hypotheses, and remaining unknowns.
+
+See [the skill definition](skills/investigate/SKILL.md).
+
 ### `write-as-poteto`
 
 Write, review, or fix a `SKILL.md` using poteto's conventions for intent, triggers, structure, naming, prose, and deliverables.
 
 See [the skill definition](skills/write-as-poteto/SKILL.md).
-
 
 ### `theo-agent-guidance`
 
