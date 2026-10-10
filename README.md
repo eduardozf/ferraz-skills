@@ -16,6 +16,12 @@ Investigate bugs or explain code behavior without changing the project. Return a
 
 See [the skill definition](skills/investigate/SKILL.md).
 
+### `session-closeout`
+
+Close out completed work by updating documentation to match the current implementation and deleting obsolete instructions, duplicate explanations, and related project leftovers. Prefer removal over preserving superseded material.
+
+See [the skill definition](skills/session-closeout/SKILL.md).
+
 ### `write-as-poteto`
 
 Write, review, or fix a `SKILL.md` using poteto's conventions for intent, triggers, structure, naming, prose, and deliverables.
