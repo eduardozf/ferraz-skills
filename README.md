@@ -8,7 +8,7 @@ A collection of portable [Agent Skills](https://agentskills.io/) for coding agen
 
 Keep task context focused by avoiding unnecessary content, tracking verified facts, removing outdated instructions, and recovering cleanly when context becomes polluted.
 
-See [the skill definition](skills/context-polution/SKILL.md).
+See [the skill definition](skills/context-pollution/SKILL.md).
 
 ### `design-consistency-review`
 
