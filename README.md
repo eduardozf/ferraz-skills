@@ -22,6 +22,12 @@ Investigate bugs or explain code behavior without changing the project. Return a
 
 See [the skill definition](skills/investigate/SKILL.md).
 
+### `poteto-mode`
+
+Apply poteto's engineering approach to agent-assisted work: clarify intent, make results observable, shape the code, verify against the real artifact, improve the environment, and expand autonomy from evidence.
+
+See [the skill definition](skills/poteto-mode/SKILL.md).
+
 ### `session-closeout`
 
 Close out completed work by updating documentation to match the current implementation and deleting obsolete instructions, duplicate explanations, and related project leftovers. Prefer removal over preserving superseded material.

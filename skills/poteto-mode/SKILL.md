@@ -26,7 +26,7 @@ For an ordinary task, complete the task and address a demonstrated cause within 
 
 ## Give the agent a way to observe its work
 
-Before iterating, identify how the agent can run the relevant code and inspect the result. Reuse the project's verification tools and procedures. Name unavailable access or tools instead of substituting guesses.
+Before iterating, identify how the agent can run the relevant code and inspect the result. Reuse the project's verification tools and procedures. Name unavailable access or tools instead of substituting guesses. Do not hand the human a check you could run yourself.
 
 Choose evidence that matches the claim:
 
@@ -37,9 +37,21 @@ Choose evidence that matches the claim:
 
 Use checks that can reveal a defect. Avoid tests that copy the implementation's assumptions or merely confirm a mock was called. Treat compilation and a passing suite as evidence for the properties they cover, not proof of the whole outcome.
 
+An inconclusive check is not a pass, and a check on the wrong surface is not a pass. When a check passes too easily, suspect the observation method before the system. Prefer a script that reruns the same comparison over a one-time eyeball. For a small diff you do not trust, find the one fact the change is safe because of and prove it by running code.
+
 Iterate by making a bounded change, running the relevant checks, inspecting failures, and correcting the cause. Stop when the agreed result is demonstrated. Report a blocked check or unresolved failure explicitly.
 
-For optimization, define the metric and acceptable regressions before repeated attempts. Retain improvements only when the comparison supports them.
+For optimization, define the metric and acceptable regressions before repeated attempts. Before you report or act on a measured number, answer seven questions from real runs:
+
+- What limits it, and why is it not double?
+- Were both sides tuned the way production runs?
+- Did it break a physical limit?
+- Did anything error or return wrong output?
+- Does it reproduce over alternating runs with a median and range?
+- Does it matter on the end-to-end path a user waits on?
+- Did the work happen inside the timed region?
+
+Retain an improvement only when that evidence supports it. When an iterative run plateaus, pivot rather than stop, and never relax the finish condition to declare success.
 
 ## Turn repeated intervention into a durable improvement
 
@@ -55,7 +67,19 @@ Prefer existing conventions. Constrain the demonstrated failure without inventin
 
 Keep deterministic transformations in code. Leave interpretation and tradeoffs to the agent. Preserve useful working tools instead of rebuilding and discarding them each session.
 
+Default to building the lever, not only when the mechanics repeat. Do the first unit by hand to learn the recipe, then build the script or generator, prove it by rerunning on that unit and comparing against the hand-done version, and make it safe to rerun. A deterministic lever beats fan-out and gives a reviewer an artifact they can rerun. If you claim to have built a lever, the diff contains the script, generator, or delegate skill.
+
 Use past conversations to recover the actual sequence of work and recurring interventions. Keep relevant decisions and conditions; omit unrelated history. Improve the shared environment when several agents repeat a failure instead of correcting each agent separately forever.
+
+## Shape the code before you write it
+
+Name the data shape before you write logic. Choose the structure that encodes the domain, such as a state machine, typed model, registry, reducer, or explicit boundary, instead of scattering conditionals.
+
+Make illegal states unrepresentable. Parse external data at the boundary, then trust the internal type. Make state-mutating operations idempotent so a retry or a crash halfway converges to the same state.
+
+When introducing a new internal API, migrate every caller and delete the old API in the same wave. Do not preserve a compatibility shim. When concurrent actors might write the same file, branch, key, or object, eliminate the sharing first. A lock is a design smell to check, not the default answer.
+
+Judge the result by reader load: the layers a reader must trace and the state they must hold in their head. Collapse one-caller wrappers, shrink mutable scope, and prefer the smaller surface that hides more complexity.
 
 ## Supply context and coordinate related work
 

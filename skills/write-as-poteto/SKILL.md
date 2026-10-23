@@ -46,6 +46,8 @@ Remove command recipes the model can safely infer. Preserve exact commands, symb
 
 Keep the core workflow self-contained. Put lengthy optional schemas or domain references in bundled files, with an explicit reading condition. Do not send the reader to another skill for essential instructions or require reading every resource on every invocation.
 
+Reference other skills by path instead of restating them. A skill is not a manual; keep only the rules that change a decision.
+
 ## Write the triggering description
 
 Finalize the description after the workflow is stable. Put what the skill does and all selection conditions here, including exclusions needed to distinguish neighboring skills.
@@ -67,6 +69,12 @@ If the skill selects the wrong requests, fix the description before rewriting th
 - Point to the actual type, config key, command, or file. Avoid vague substitutes.
 - Explain a rule only when its application would otherwise be confusing. Keep the reason short.
 - Use plain words. Remove filler, invented jargon, metaphors, aphorisms, emoji, and em or en dashes.
+- Say what it does, not how it feels. If the sentence could appear unchanged in another project's docs, it says nothing about this one.
+- Do not over-compress. Keep articles and verbs. "Parser rejects bad date, exit 2, no write" becomes "The parser rejects a bad date, exits with code 2, and writes nothing."
+- Vary sentence length. One thought per sentence does not mean every sentence is short.
+- Call each thing by one name everywhere.
+- Use generic conventions: "the user" or "the human", not the author's first name.
+- Agent-facing prose has a higher bar than human prose, because an unhelpful sentence becomes an instruction some future agent follows.
 - Keep each rule once. Cut repeated warnings, research history, unnecessary dates, and claims that the content is already distilled.
 - Add a section only for a distinct decision. Do not force matching sections across skills.
 - Number sequential steps when order matters. Preserve stable rule identifiers when other instructions cite them.
