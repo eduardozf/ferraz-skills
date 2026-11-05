@@ -6,7 +6,7 @@ A collection of portable [Agent Skills](https://agentskills.io/) for coding agen
 
 ### `bar-raiser`
 
-Improve a piece of work in rounds until independent reviewer agents each score it at or above a target you set. Reviewers never see the target, earlier scores, or the round count, so each score stays blind.
+Improve a piece of work in rounds until independent reviewer agents each score it at or above a target you set. Reviewers never see the target, earlier scores, or the round count, so each score stays blind. A bundled script checks the brief for leaks and decides each round whether to continue, pause a reviewer, change approach, or stop.
 
 See [the skill definition](skills/bar-raiser/SKILL.md).
 
