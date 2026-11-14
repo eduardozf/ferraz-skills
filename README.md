@@ -4,6 +4,12 @@ A collection of portable [Agent Skills](https://agentskills.io/) for coding agen
 
 ## Skills
 
+### `agent-time-estimate`
+
+Estimate how long a coding agent will take by counting tool calls and converting them to wall-clock time with a bundled script. The script corrects for estimators that undercount tool calls, simulates follow-up runs and the user's review time, and reports P10 to P90 minutes. It uses `~/.config/agent-time-bench/calibration.json` when present and a generic calibration otherwise.
+
+See [the skill definition](skills/agent-time-estimate/SKILL.md).
+
 ### `bar-raiser`
 
 Improve a piece of work in rounds until independent reviewer agents each score it at or above a target you set. Reviewers never see the target, earlier scores, or the round count, so each score stays blind. A bundled script checks the brief for leaks and decides each round whether to continue, pause a reviewer, change approach, or stop.
