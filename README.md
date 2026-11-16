@@ -12,7 +12,7 @@ See [the skill definition](skills/agent-time-estimate/SKILL.md).
 
 ### `bar-raiser`
 
-Improve a piece of work in rounds until independent reviewer agents each score it at or above a target you set. Reviewers never see the target, earlier scores, or the round count, so each score stays blind. A bundled script checks the brief for leaks and decides each round whether to continue, pause a reviewer, change approach, or stop.
+Improve a piece of work in rounds until independent reviewer agents each score it at or above a target you set. Reviewers never see the target. Between rounds each reviewer sees only its own earlier review and what changed, and the target counts only when a final blind round, with the brief alone, confirms it. Out-of-scope suggestions are declined, and the loop changes approach or asks you when scores stop improving.
 
 See [the skill definition](skills/bar-raiser/SKILL.md).
 
